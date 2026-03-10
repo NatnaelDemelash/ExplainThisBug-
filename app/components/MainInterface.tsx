@@ -52,14 +52,12 @@ export default function MainInterface() {
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            className="relative w-full rounded-[10px] border-2 border-white/10 bg-white/[0.02] px-5 py-4 text-[15px] font-light leading-6  placeholder:font-normal placeholder:text-gray-500 transition-all duration-200 hover:border-white/15 focus:border-[#10b981]/70 focus:outline-none"
+            className="w-full rounded-[10px] border border-white/8 bg-white/2 px-5 py-4 font-mono text-[13px] font-light leading-6 tracking-[-0.02em] text-zinc-300 placeholder:font-light placeholder:leading-6 placeholder:tracking-[-0.02em] placeholder:text-zinc-500 focus:border-white/12 focus:outline-none"
             placeholder={`TypeError: Cannot read properties of undefined (reading 'map')
-    at UserList (src/components/UserList.tsx:18:23)
-    at renderWithHooks (react-dom.development.js:16305:18)
-    at mountIndeterminateComponent (react-dom.development.js:20074:13)`}
-            rows={5}
+    at Array.map (<anonymous>)
+    at renderList (/app/components/List.tsx:15:23)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)`}
+            rows={6}
           />
 
           <div className="absolute bottom-3 right-4 text-xs text-gray-500">
