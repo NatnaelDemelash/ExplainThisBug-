@@ -1,20 +1,25 @@
 "use client";
 
+import useStore from "@/store/useBugStore";
 import { ArrowRight, Bug, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function MainInterface() {
-  const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState("");
-  const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const setErrorText = useStore((state) => state.setErrorText);
+  const route = useRouter();
 
   const handleExplain = () => {
     if (!text.trim()) return;
+
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+
+    setErrorText(text);
+    console.log("storing text:", text);
+    route.push("/results");
+    setIsLoading(false);
   };
 
   return (
