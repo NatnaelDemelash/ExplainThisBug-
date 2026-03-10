@@ -40,11 +40,11 @@ export default function MainInterface() {
       </div>
 
       <div className="w-full max-w-3xl text-center">
-        <h1 className="mb-4 bg-linear-to-r from-white to-gray-400 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl md:text-6xl">
+        <h1 className="mb-4 bg-linear-to-r from-white to-gray-400 bg-clip-text text-4xl font-bold tracking-tighter text-transparent sm:text-5xl md:text-6xl">
           Explain This Bug
         </h1>
 
-        <p className="mb-10 text-[15px] text-gray-400 sm:text-lg">
+        <p className="mb-10 text-[13px] text-gray-500 sm:text-lg tracking-tighter">
           Paste your error. Understand it instantly.
         </p>
 
@@ -64,27 +64,20 @@ export default function MainInterface() {
             {text.length} / 500
           </div>
         </div>
-
         <button
           onClick={handleExplain}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
           disabled={!text.trim() || isLoading}
-          className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-[#10b981] px-7 py-3.5 text-sm font-medium text-white transition-all duration-200 hover:bg-[#0ea371] disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-4 py-2.5 text-[13px] font-medium text-zinc-200 transition-colors duration-150 hover:bg-white/[0.06] hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
         >
           {isLoading ? (
             <>
-              <Loader2 className="h-4.5 w-4.5 animate-spin" />
-              <span>Analyzing...</span>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Analyzing</span>
             </>
           ) : (
             <>
-              <span>Explain this Bug</span>
-              <ArrowRight
-                className={`h-4.5 w-4.5 transition-transform duration-200 ${
-                  isHovered ? "translate-x-0.5" : ""
-                }`}
-              />
+              <span>Explain bug</span>
+              <ArrowRight className="h-4 w-4" />
             </>
           )}
         </button>
