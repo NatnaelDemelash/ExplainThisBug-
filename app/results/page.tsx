@@ -1,10 +1,12 @@
-"use client";
+'use client';
 
-import useStore from "@/store/useBugStore";
-import { CodeXmlIcon, Lightbulb, Wrench } from "lucide-react";
+import useStore from '@/store/useBugStore';
+import { CodeXmlIcon, Lightbulb, Wrench } from 'lucide-react';
 
 export default function Results() {
   const errorText = useStore((state) => state.errorText);
+  const explanation = useStore((state) => state.explanation);
+  console.log('Explanation from store:', explanation);
 
   return (
     <section className="mt-6 px-4 sm:px-6">
@@ -17,7 +19,7 @@ export default function Results() {
 
           <div className="mt-3 rounded-lg border border-red-950/30 bg-red-950/10 p-4 shadow-[0_0_18px_rgba(248,113,113,0.06)]">
             <p className="whitespace-pre-wrap break-words font-mono text-sm leading-6 text-red-400">
-              {errorText || "No error message yet."}
+              {errorText || 'No error message yet.'}
             </p>
           </div>
         </div>
@@ -49,7 +51,7 @@ export default function Results() {
             </div>
 
             <p className="mt-4 text-sm leading-7 text-zinc-400">
-              This error happens because{" "}
+              This error happens because{' '}
               <code className="text-zinc-200">.map()</code> is being called on a
               value that is <code className="text-zinc-200">undefined</code>.
               Common causes include data not being available yet, missing

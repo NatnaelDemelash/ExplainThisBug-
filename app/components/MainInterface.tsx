@@ -1,25 +1,49 @@
-"use client";
+'use client';
 
-import useStore from "@/store/useBugStore";
-import { ArrowRight, Bug, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import useStore from '@/store/useBugStore';
+import { ArrowRight, Bug, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function MainInterface() {
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const setErrorText = useStore((state) => state.setErrorText);
+  const setExplanation = useStore((state) => state.setExplanation);
   const route = useRouter();
 
-  const handleExplain = () => {
-    if (!text.trim()) return;
+  // const handleExplain = () => {
+  //   if (!text.trim()) return;
 
+  //   setIsLoading(true);
+
+  //   setErrorText(text);
+  //   route.push("/results");
+  //   setIsLoading(false);
+
+  // };
+
+  const handleExplain = async () => {
+    if (!text.trim()) return;
     setIsLoading(true);
 
-    setErrorText(text);
-    console.log("storing text:", text);
-    route.push("/results");
-    setIsLoading(false);
+    try {
+      const res = await fetch('/api/explain', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ errorText: text }),
+      });
+
+      const data = await res.json();
+      setErrorText(text);
+      setExplanation(JSON.stringify(data.explanation));
+      route.push('/results');
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error explaining the bug:', error);
+      return;
+    }
   };
 
   return (
@@ -34,13 +58,13 @@ export default function MainInterface() {
       <div className="absolute left-8 top-1/3 hidden opacity-15 lg:block">
         <Bug
           className="h-11 w-11 animate-bounce text-[#10b981]"
-          style={{ animationDuration: "3s" }}
+          style={{ animationDuration: '3s' }}
         />
       </div>
       <div className="absolute right-8 top-2/3 hidden opacity-15 lg:block">
         <Bug
           className="h-11 w-11 animate-bounce text-[#10b981]"
-          style={{ animationDuration: "4s", animationDelay: "1s" }}
+          style={{ animationDuration: '4s', animationDelay: '1s' }}
         />
       </div>
 

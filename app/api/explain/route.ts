@@ -48,9 +48,8 @@ Do not include markdown or any text outside the JSON.
     ],
   });
 
-  const content = completion.choices[0].message.content ?? '[]';
-  const jsonMatch = content.match(/\{[\s\S]*\}/);
-  const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : '{}');
+  const content = completion.choices[0].message.content ?? '{}';
+  const parsed = JSON.parse(content);
 
   return Response.json({
     explanation: parsed,
