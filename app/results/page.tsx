@@ -1,7 +1,7 @@
 "use client";
 
 import useStore from "@/store/useBugStore";
-import { Baby, CodeXmlIcon, Wrench } from "lucide-react";
+import { CodeXmlIcon, Lightbulb, Wrench } from "lucide-react";
 
 export default function Results() {
   const errorText = useStore((state) => state.errorText);
@@ -26,9 +26,9 @@ export default function Results() {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-5 transition-colors hover:border-zinc-700">
             <div className="flex items-center gap-2">
-              <Baby className="h-5 w-5 text-emerald-400" />
+              <Lightbulb className="h-5 w-5 text-emerald-400" />
               <h2 className="text-base font-semibold text-zinc-100">
-                Like you&apos;re 5
+                Basic Explanation
               </h2>
             </div>
 
