@@ -1,13 +1,12 @@
+import { Bug, SearchX } from "lucide-react";
+
 export default function History() {
-  const bugs = [
-    {
-      title: "TypeError: Cannot read properties of undefined",
-      date: "March 11, 2026 at 2:34 PM",
-      description:
-        "Your code is trying to access something from a list or object that does not exist yet. This usually happens when data has not loaded or a value is missing.",
-      tags: ["React", "Next.js", "JavaScript"],
-    },
-  ];
+  const bugs: {
+    title: string;
+    date: string;
+    description: string;
+    tags: string[];
+  }[] = [];
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
@@ -21,36 +20,58 @@ export default function History() {
       </div>
 
       <div className="space-y-5">
-        {bugs.map((bug, index) => (
-          <div
-            key={index}
-            className="group rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 shadow-sm transition-all duration-200 hover:border-zinc-700 hover:bg-zinc-900/80"
-          >
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div className="flex-1">
-                <h2 className="text-lg font-semibold leading-snug text-zinc-100">
-                  {bug.title}
-                </h2>
-                <p className="mt-2 text-xs text-zinc-500">{bug.date}</p>
+        {bugs.length > 0 ? (
+          bugs.map((bug, index) => (
+            <div
+              key={index}
+              className="group rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 shadow-sm transition-all duration-200 hover:border-zinc-700 hover:bg-zinc-900/80"
+            >
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="flex-1">
+                  <h2 className="text-lg font-semibold leading-snug text-zinc-100">
+                    {bug.title}
+                  </h2>
+                  <p className="mt-2 text-xs text-zinc-500">{bug.date}</p>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {bug.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
 
-              <div className="flex flex-wrap gap-2">
-                {bug.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              <p className="mt-4 text-sm leading-6 text-zinc-400">
+                {bug.description}
+              </p>
+            </div>
+          ))
+        ) : (
+          <div className="rounded-3xl border border-dashed border-zinc-800 bg-zinc-950/60 px-6 py-12 text-center shadow-sm">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900 text-zinc-400">
+              <SearchX className="h-7 w-7" />
             </div>
 
-            <p className="mt-4 text-sm leading-6 text-zinc-400">
-              {bug.description}
+            <h2 className="mt-5 text-lg font-semibold text-zinc-100">
+              No bug history yet
+            </h2>
+
+            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-zinc-400">
+              You have not saved any bug explanations yet. Once you start
+              analyzing bugs, they will appear here.
             </p>
+
+            <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900 px-4 py-2 text-xs text-zinc-400">
+              <Bug className="h-4 w-4" />
+              Your saved explanations will show up here
+            </div>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
