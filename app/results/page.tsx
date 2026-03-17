@@ -10,7 +10,8 @@ interface Explanation {
 import { supabase } from "@/lib/supabase";
 import useStore from "@/store/useBugStore";
 import { Bookmark, CodeXmlIcon, Lightbulb, Wrench } from "lucide-react";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Results() {
   const errorText = useStore((state) => state.errorText);
@@ -19,10 +20,18 @@ export default function Results() {
   const [savedId, setSavedId] = useState<string | null>(null);
   const [isBookmarkHovered, setIsBookmarkHovered] = useState(false);
   const [isBookmarkAnimating, setIsBookmarkAnimating] = useState(false);
+  const router = useRouter();
 
   const parsed: Explanation = JSON.parse(explanation ?? "{}");
 
   const { basic_explanation, senior_dev_explanation }: Explanation = parsed;
+
+  // Redirect to home if no explanation in state
+  useEffect(() => {
+    if (!explanation) {
+      router.push("/");
+    }
+  }, [explanation]);
 
   const handleSave = async () => {
     setIsBookmarkAnimating(true);
