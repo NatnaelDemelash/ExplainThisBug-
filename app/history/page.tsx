@@ -1,12 +1,40 @@
+"use client";
+
+import { supabase } from "@/lib/supabase";
 import { Bug, SearchX } from "lucide-react";
+import { useEffect, useState } from "react";
+
+interface Bug {
+  id: string;
+  label: string;
+  error_text: string;
+  basic_explanation: string;
+  senior_dev_explanation: string;
+  suggested_fix: string;
+  created_at: string;
+  tags: string;
+}
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+});
 
 export default function History() {
-  const bugs: {
-    title: string;
-    date: string;
-    description: string;
-    tags: string[];
-  }[] = [];
+  const [bugs, setBugs] = useState<Bug[]>([]);
+
+  useEffect(() => {
+    const fetchSavedBugs = async () => {
+      const { data } = await supabase.from("bugs").select("*");
+
+      if (data) setBugs(data);
+    };
+
+    fetchSavedBugs();
+  }, []);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
@@ -29,13 +57,17 @@ export default function History() {
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="flex-1">
                   <h2 className="text-lg font-semibold leading-snug text-zinc-100">
-                    {bug.title}
+                    {bug.label}
                   </h2>
-                  <p className="mt-2 text-xs text-zinc-500">{bug.date}</p>
+                  <p className="mt-2 text-xs text-zinc-500">
+                    {bug?.created_at
+                      ? dateFormatter.format(new Date(bug.created_at))
+                      : ""}
+                  </p>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  {bug.tags.map((tag) => (
+                  {JSON.parse(bug.tags).map((tag: string) => (
                     <span
                       key={tag}
                       className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300"
@@ -47,7 +79,7 @@ export default function History() {
               </div>
 
               <p className="mt-4 text-sm leading-6 text-zinc-400">
-                {bug.description}
+                {bug.basic_explanation}
               </p>
             </div>
           ))
