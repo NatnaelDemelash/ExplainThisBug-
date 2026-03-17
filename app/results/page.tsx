@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 interface Explanation {
   label: string;
@@ -7,21 +7,47 @@ interface Explanation {
   suggested_fix: string[];
 }
 
-import useStore from '@/store/useBugStore';
-import { CodeXmlIcon, Lightbulb, Wrench } from 'lucide-react';
+import { supabase } from "@/lib/supabase";
+import useStore from "@/store/useBugStore";
+import { Bookmark, CodeXmlIcon, Lightbulb, Wrench } from "lucide-react";
+import { useState } from "react";
 
 export default function Results() {
   const errorText = useStore((state) => state.errorText);
   const explanation = useStore((state) => state.explanation);
-  console.log(explanation);
+  const [saved, setSaved] = useState(false);
 
-  const parsed: Explanation = JSON.parse(explanation ?? '{}');
+  const parsed: Explanation = JSON.parse(explanation ?? "{}");
 
   const { basic_explanation, senior_dev_explanation }: Explanation = parsed;
+
+  const handleSave = async () => {
+    await supabase.from("bugs").insert({
+      error_text: errorText,
+      label: parsed.label,
+      basic_explanation: parsed.basic_explanation,
+      senior_dev_explanation: parsed.senior_dev_explanation,
+      suggested_fix: JSON.stringify(parsed.suggested_fix),
+      tags: "[]",
+      user_id: "anonymous",
+    });
+
+    setSaved(true);
+  };
 
   return (
     <section className="mt-6 px-4 sm:px-6">
       <div className="mx-auto flex max-w-5xl flex-col gap-4">
+        {/* Bookmark Icon */}
+        <div className="flex justify-end my-2">
+          <Bookmark
+            color={saved ? "#3DB374" : "white"}
+            fill={saved ? "#3DB374" : "none"}
+            onClick={handleSave}
+            className="cursor-pointer"
+          />
+        </div>
+
         {/* Original Error */}
         <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-5">
           <h2 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
@@ -29,8 +55,8 @@ export default function Results() {
           </h2>
 
           <div className="mt-3 rounded-lg border border-red-950/30 bg-red-950/10 p-4 shadow-[0_0_18px_rgba(248,113,113,0.06)]">
-            <p className="whitespace-pre-wrap break-words font-mono text-sm leading-6 text-red-400">
-              {errorText || 'No error message yet.'}
+            <p className="whitespace-pre-wrap wrapped-break-words font-mono text-sm leading-6 text-red-400">
+              {errorText || "No error message yet."}
             </p>
           </div>
         </div>
@@ -78,7 +104,7 @@ export default function Results() {
               <code className="font-mono font-extralight text-emerald-400">
                 {parsed?.suggested_fix
                   ?.map((step, index) => `${index + 1}. ${step}`)
-                  .join('\n')}
+                  .join("\n")}
               </code>
             </pre>
           </div>
