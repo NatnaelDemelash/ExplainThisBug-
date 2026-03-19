@@ -51,7 +51,7 @@ export default function History() {
         {bugs.length > 0 ? (
           bugs.map((bug, index) => (
             <div
-              key={index}
+              key={bug.id}
               className="group rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 shadow-sm transition-all duration-200 hover:border-zinc-700 hover:bg-zinc-900/80"
             >
               <div className="flex flex-wrap items-start justify-between gap-4">

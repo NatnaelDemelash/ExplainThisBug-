@@ -1,12 +1,20 @@
+"use client";
+
+import { handleSignIn, supabase } from "@/lib/supabase";
+import { User } from "@supabase/supabase-js";
 import { Bug } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-const navItems = [
-  { href: "/history", label: "History" },
-  { href: "/signin", label: "Sign in" },
-];
+const navItems = [{ href: "/history", label: "History" }];
 
 export default function Navbar() {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+  }, []);
+
   return (
     <header className="sticky top-0 z-50 border-b border-white/6 bg-black/70">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
@@ -33,6 +41,17 @@ export default function Navbar() {
               {item.label}
             </Link>
           ))}
+
+          {user ? (
+            <span className="text-xs text-green-500">{user.email}</span>
+          ) : (
+            <button
+              onClick={handleSignIn}
+              className="text-xs bg-zinc-200 text-black px-3 py-2 border-none rounded-full cursor-pointer"
+            >
+              Sign In
+            </button>
+          )}
         </nav>
       </div>
     </header>
