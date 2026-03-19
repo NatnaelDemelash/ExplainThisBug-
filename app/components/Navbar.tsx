@@ -14,7 +14,7 @@ export default function Navbar() {
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
   }, []);
-
+  console.log(user);
   return (
     <header className="sticky top-0 z-50 border-b border-white/6 bg-black/70">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6">

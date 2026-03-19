@@ -28,7 +28,13 @@ export default function History() {
 
   useEffect(() => {
     const fetchSavedBugs = async () => {
-      const { data } = await supabase.from("bugs").select("*");
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const { data } = await supabase
+        .from("bugs")
+        .select("*")
+        .eq("user_id", user?.id);
 
       if (data) setBugs(data);
     };

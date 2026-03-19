@@ -34,6 +34,9 @@ export default function Results() {
   }, [explanation]);
 
   const handleSave = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     setIsBookmarkAnimating(true);
     const { data } = await supabase
       .from("bugs")
@@ -44,7 +47,7 @@ export default function Results() {
         senior_dev_explanation: parsed.senior_dev_explanation,
         suggested_fix: JSON.stringify(parsed.suggested_fix),
         tags: "[]",
-        user_id: "anonymous",
+        user_id: user?.id,
       })
       .select();
 
