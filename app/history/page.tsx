@@ -2,6 +2,7 @@
 
 import { supabase } from "@/lib/supabase";
 import { Bug, SearchX } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface Bug {
@@ -25,21 +26,24 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 
 export default function History() {
   const [bugs, setBugs] = useState<Bug[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchSavedBugs = async () => {
+    const init = async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
+      if (!user) return router.push("/");
+
       const { data } = await supabase
         .from("bugs")
         .select("*")
-        .eq("user_id", user?.id);
+        .eq("user_id", user.id);
 
       if (data) setBugs(data);
     };
 
-    fetchSavedBugs();
+    init();
   }, []);
 
   return (
