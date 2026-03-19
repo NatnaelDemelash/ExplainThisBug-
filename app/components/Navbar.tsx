@@ -13,6 +13,7 @@ export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const pathname = usePathname();
 
+  console.log(user);
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
   }, []);
@@ -21,6 +22,13 @@ export default function Navbar() {
     await supabase.auth.signOut();
     setUser(null);
   };
+
+  const full_name = user?.user_metadata?.full_name ?? "";
+  const initials = full_name
+    .split(" ")
+    .map((word: string) => word[0])
+    .join("")
+    .toUpperCase();
 
   return (
     <header className="sticky top-0 z-50 border-b border-zinc-800 bg-black">
@@ -47,15 +55,17 @@ export default function Navbar() {
 
           {user ? (
             <div className="flex items-center gap-3">
-              <span className="text-xs text-zinc-400 max-w-[150px] truncate">
-                {user.email}
-              </span>
               <button
                 onClick={handleSignOut}
                 className="text-xs text-zinc-400 hover:text-zinc-200"
               >
                 Sign out
               </button>
+              <div className="h-7 w-7 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+                <span className="text-xs font-medium text-emerald-400">
+                  {initials}
+                </span>
+              </div>
             </div>
           ) : (
             <button
