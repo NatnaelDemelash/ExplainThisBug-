@@ -4,55 +4,68 @@ import { handleSignIn, supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 import { Bug } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const navItems = [{ href: "/history", label: "History" }];
 
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
   }, []);
-  console.log(user);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+  };
+
   return (
-    <header className="sticky top-0 z-50 border-b border-white/6 bg-black/70">
-      <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-white/95 transition-opacity hover:opacity-80"
-        >
-          <Bug className="h-4.25 w-4.25 text-emerald-500" strokeWidth={2} />
-          <span className="text-[14px] font-medium tracking-[-0.02em]">
-            ExplainThisBug
-          </span>
+    <header className="sticky top-0 z-50 border-b border-zinc-800 bg-black">
+      <div className="mx-auto flex h-12 w-full max-w-6xl items-center justify-between px-4">
+        <Link href="/" className="flex items-center gap-1.5">
+          <Bug className="h-4 w-4 text-emerald-500" />
+          <span className="text-sm text-zinc-100">ExplainThisBug</span>
         </Link>
 
-        <nav
-          aria-label="Primary navigation"
-          className="flex items-center gap-1"
-        >
+        <div className="flex items-center gap-4">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-md px-4 py-1.5 text-[13px] font-normal text-zinc-400 transition-colors hover:text-white"
+              className={`text-xs ${
+                pathname === item.href
+                  ? "text-emerald-500"
+                  : "text-zinc-400 hover:text-zinc-200"
+              }`}
             >
               {item.label}
             </Link>
           ))}
 
           {user ? (
-            <span className="text-xs text-green-500">{user.email}</span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-zinc-400 max-w-[150px] truncate">
+                {user.email}
+              </span>
+              <button
+                onClick={handleSignOut}
+                className="text-xs text-zinc-400 hover:text-zinc-200"
+              >
+                Sign out
+              </button>
+            </div>
           ) : (
             <button
               onClick={handleSignIn}
-              className="text-xs bg-zinc-200 text-black px-3 py-2 border-none rounded-full cursor-pointer"
+              className="text-xs text-emerald-500 hover:text-emerald-400"
             >
-              Sign In
+              Sign in
             </button>
           )}
-        </nav>
+        </div>
       </div>
     </header>
   );
