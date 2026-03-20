@@ -13,7 +13,6 @@ export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const pathname = usePathname();
 
-  console.log(user);
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
   }, []);
@@ -39,34 +38,36 @@ export default function Navbar() {
         </Link>
 
         <div className="flex items-center gap-4">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`text-xs ${
-                pathname === item.href
-                  ? "text-emerald-500"
-                  : "text-zinc-400 hover:text-zinc-200"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-
           {user ? (
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handleSignOut}
-                className="text-xs text-zinc-400 hover:text-zinc-200"
-              >
-                Sign out
-              </button>
-              <div className="h-7 w-7 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
-                <span className="text-xs font-medium text-emerald-400">
-                  {initials}
-                </span>
+            <>
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`text-xs ${
+                    pathname === item.href
+                      ? "text-emerald-500"
+                      : "text-zinc-400 hover:text-zinc-200"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleSignOut}
+                  className="text-xs text-zinc-400 hover:text-zinc-200"
+                >
+                  Sign out
+                </button>
+                <div className="h-7 w-7 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+                  <span className="text-xs font-medium text-emerald-400">
+                    {initials}
+                  </span>
+                </div>
               </div>
-            </div>
+            </>
           ) : (
             <button
               onClick={handleSignIn}
